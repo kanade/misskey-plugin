@@ -1,0 +1,131 @@
+/// @ 0.12.4
+
+### {
+  id: "85bc69a0-ce37-11ed-afa1-0242ac120002"
+  name: "デコ文字をデコード"
+  version: "1.0.0"
+  author: "kanade"
+  description: "デコ文字を通常文字に戻します"
+  permissions: []
+  config: null
+}
+
+let table = [
+  [":_a:" "あ"]
+  [":_i:" "い"]
+  [":_u:" "う"]
+  [":_e:" "え"]
+  [":_o:" "お"]
+  [":_ka:" "か"]
+  [":_ki:" "き"]
+  [":_ku:" "く"]
+  [":_ke:" "け"]
+  [":_ko:" "こ"]
+  [":_sa:" "さ"]
+  [":_shi:" "し"]
+  [":_su:" "す"]
+  [":_se:" "せ"]
+  [":_so:" "そ"]
+  [":_ta:" "た"]
+  [":_ti:" "ち"]
+  [":_tsu:" "つ"]
+  [":_te:" "て"]
+  [":_to:" "と"]
+  [":_na:" "な"]
+  [":_ni:" "に"]
+  [":_nu:" "ぬ"]
+  [":_ne:" "ね"]
+  [":_no:" "の"]
+  [":_ha:" "は"]
+  [":_hi:" "ひ"]
+  [":_fu:" "ふ"]
+  [":_he:" "へ"]
+  [":_ho:" "ほ"]
+  [":_ma:" "ま"]
+  [":_mi:" "み"]
+  [":_mu:" "む"]
+  [":_me:" "め"]
+  [":_mo:" "も"]
+  [":_ya:" "や"]
+  [":_yu:" "ゆ"]
+  [":_yo:" "よ"]
+  [":_ra:" "ら"]
+  [":_ri:" "り"]
+  [":_ru:" "る"]
+  [":_re:" "れ"]
+  [":_ro:" "ろ"]
+  [":_wa:" "わ"]
+  [":_wo:" "を"]
+  [":_n:" "ん"]
+  [":_ten:" "、"]
+  [":_maru:" "。"]
+  [":_kkb:" "(" ]
+  [":_kka:" ")" ]
+  [":_kkb:" "（"]
+  [":_kka:" "）"]
+  [":_prolong:" "ー"]
+  [":_wave:" "~"]
+  [":_wave:" "～"]
+  [":_exclamation_mark:" "!"]
+  [":_exclamation_mark:" "！"]
+  [":_question_mark:" "?"]
+  [":_question_mark:" "？"]
+  [":_la:" "ぁ"]
+  [":_li:" "ぃ"]
+  [":_lu:" "ぅ"]
+  [":_le:" "ぇ"]
+  [":_lo:" "ぉ"]
+  [":_lya:" "ゃ"]
+  [":_lyu:" "ゅ"]
+  [":_lyo:" "ょ"]
+  [":_ltsu:" "っ"]
+  [":_ga:" "が"]
+  [":_gi:" "ぎ"]
+  [":_gu:" "ぐ"]
+  [":_ge:" "げ"]
+  [":_go:" "ご"]
+  [":_za:" "ざ"]
+  [":_zi:" "じ"]
+  [":_zu:" "ず"]
+  [":_ze:" "ぜ"]
+  [":_zo:" "ぞ"]
+  [":_da:" "だ"]
+  [":_di:" "ぢ"]
+  [":_du:" "づ"]
+  [":_de:" "で"]
+  [":_do:" "ど"]
+  [":_ba:" "ば"]
+  [":_bi:" "び"]
+  [":_bu:" "ぶ"]
+  [":_be:" "べ"]
+  [":_bo:" "ぼ"]
+  [":_pa:" "ぱ"]
+  [":_pi:" "ぴ"]
+  [":_pu:" "ぷ"]
+  [":_pe:" "ぺ"]
+  [":_po:" "ぽ"]
+  [":_vu:" "ゔ"]
+]
+
+Plugin:register_note_view_interruptor(@(note) {
+  var text = null
+  if (note.text != null) {
+    text = note.text
+  }
+  if (note.replyId != null) {
+    text = note.reply.text
+  }
+  if (note.renoteId != null) {
+    text = note.renote.text
+  }
+
+  if (text != null && text.incl(":")) {
+    each let t table {
+      text = text.replace(t[0] t[1])
+    }
+  }
+  
+  note.text = text
+  
+  note
+})

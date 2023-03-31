@@ -3,7 +3,7 @@
 ### {
   id: "85bc69a0-ce37-11ed-afa1-0242ac120002"
   name: "デコ文字をデコード"
-  version: "1.0.0"
+  version: "1.0.1"
   author: "kanade"
   description: "デコ文字を通常文字に戻します"
   permissions: []
@@ -107,25 +107,19 @@ let table = [
   [":_vu:" "ゔ"]
 ]
 
-Plugin:register_note_view_interruptor(@(note) {
-  var text = null
-  if (note.text != null) {
-    text = note.text
+@decode(txt) {
+  each let t table {
+    txt = txt.replace(t[0] t[1])
   }
-  if (note.replyId != null) {
-    text = note.reply.text
-  }
-  if (note.renoteId != null) {
-    text = note.renote.text
-  }
+  return txt
+}
 
-  if (text != null && text.incl(":")) {
-    each let t table {
-      text = text.replace(t[0] t[1])
-    }
-  }
+Plugin:register_note_view_interruptor(@(note) {
   
-  note.text = text
+  if (note.text != null && note.text.incl(":")) {
+    note.text = decode(note.text)
+  }
   
   note
 })
+

@@ -11,14 +11,14 @@
     words: {
       type: 'string'
       label: '自動CWにする対象'
-      description: 'ミュート対象をカンマ区切りで指定（デフォルトではハッシュタグを含むノートを指定しています）'
+      description: 'CW対象をカンマ区切りで指定（デフォルトではハッシュタグを含むノートを指定しています）'
       default: '#'
     }
     wran: {
       type: 'string'
       label: 'CWに使うテキスト'
       description: '注意喚起のテキストです'
-      default: 'プラグインによりミュートされています'
+      default: 'プラグインによりCWされています'
     }
   }
 }

@@ -36,8 +36,10 @@
 }
 
 Plugin:register_note_view_interruptor(@(note) {
-  if (note.text != null && note.cw == null && search(note)) {
-    note.cw = `{Plugin:config.wran}`
+  if (note.text != null && note.cw == null) {
+    if (search(note)) {
+      note.cw = `{Plugin:config.wran}`
+    }
   }
 
   note

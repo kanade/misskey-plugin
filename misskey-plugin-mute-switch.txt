@@ -11,8 +11,8 @@
     words: {
       type: 'string'
       label: '自動CWにする対象'
-      description: 'CW対象をカンマ区切りで指定（デフォルトではハッシュタグを含むノートを指定しています）'
-      default: '#'
+      description: 'CW対象をカンマ区切りで指定'
+      default: '対象ワード1,対象ワード2,対象ワード3'
     }
     wran: {
       type: 'string'

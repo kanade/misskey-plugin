@@ -1,0 +1,45 @@
+/// @ 0.12.4
+
+### {
+  id: "9d9f5040-adb7-4d4d-889b-52909c22276b"
+  name: "ミュートノートを再折りたたみ可能にします"
+  version: "1.0.0"
+  author: "kanade"
+  description: "ミュートノートを再折りたたみ可能にします"
+  permissions: []
+  config: {
+    words: {
+      type: 'string'
+      label: '自動CWにする対象'
+      description: 'ミュート対象をカンマ区切りで指定（デフォルトではハッシュタグを含むノートを指定しています）'
+      default: '#'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'プラグインによりミュートされています'
+    }
+  }
+}
+
+@search(note) {
+  let words = `{Plugin:config.words}`.split(",")
+  if (words != false) {
+    each let w words {
+      if (note.text.incl(w)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (note.text != null && note.cw == null && search(note)) {
+    note.cw = `{Plugin:config.wran}`
+  }
+
+  note
+})
+

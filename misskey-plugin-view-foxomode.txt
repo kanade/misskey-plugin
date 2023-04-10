@@ -1,0 +1,30 @@
+/// @ 0.12.4
+### {
+  id: "30564078-c595-4a02-02c1-9c93a401c8e8"
+  name: "全員きつねさん"
+  version: "1.0.0"
+  author: "kanade"
+  description: "全員きつねさん"
+  permissions: []
+  config: {
+    foxmode: {
+      type: "boolean"
+      label: "全員きつねさんにしちゃう？"
+      default: true
+    }
+  }}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (Plugin:config.foxmode) {
+    if (note.text != null) {
+      note.text = note.text.replace("な", "こゃ").replace("にゃ", "こゃ")
+    }
+    if (note.renote != null) {
+      note.renote.text = note.renote.text.replace("な", "こゃ").replace("にゃ", "こゃ")
+    }
+    if (note.reply != null) {
+      note.reply.text = note.reply.text.replace("な", "こゃ").replace("にゃ", "こゃ")
+    }
+  }
+  note
+})

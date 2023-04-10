@@ -1,0 +1,15 @@
+/// @ 0.12.4
+### {
+  id: "d4c2851e-f9af-46c3-bcaf-ab7f226fb671"
+  name: "ねこちゃんボタン"
+  version: "1.0.0"
+  author: "kanade"
+  description: "手動でねこちゃんになります"
+  permissions: []
+  config: null
+}
+
+Mk:register_post_form_action("🐈" @(form update) {
+  let text = form.text.replace("な" "にゃ").replace("ナ" "ニャ")
+  update("text" text)
+})

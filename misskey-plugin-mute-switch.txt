@@ -38,8 +38,8 @@
 Plugin:register_note_view_interruptor(@(note) {
   // 自分のノートは対象外にしたい場合は以下の行を // でコメントアウトして
   if (note.text != null && note.cw == null) {
-  // 代わりに以下の行の // を消して "_kanade_" を自分のユーザー名にください。
-//  if (note.user.username != "_kanade_" && (note.text != null && note.cw == null)) {
+  // 代わりに以下の行の // を消して "_kanade_" を自分のユーザー名に書き換えてください。
+  //if (note.user.username != "_kanade_" && (note.text != null && note.cw == null)) {
     if (search(note)) {
       note.cw = `{Plugin:config.wran}`
     }
@@ -47,4 +47,3 @@ Plugin:register_note_view_interruptor(@(note) {
 
   note
 })
-

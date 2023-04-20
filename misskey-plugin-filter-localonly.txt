@@ -11,7 +11,8 @@
 }
 
 Plugin:register_note_view_interruptor(@(note) {
-  if (note.localOnly && note.renoteId == null) {
-    note
+  if (!note.localOnly) {
+    note.cw = ""
   }
+  note
 })

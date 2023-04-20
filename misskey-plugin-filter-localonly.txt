@@ -1,0 +1,17 @@
+/// @ 0.12.4
+
+### {
+  id: "eb17f100-9b7c-4af2-938b-8b8f6ab3e75e"
+  name: "ローカルのみ設定のノートだけ表示"
+  version: "1.0.0"
+  author: "kanade"
+  description: "ローカルのみ設定のノートだけ表示"
+  permissions: []
+  config: null
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (note.localOnly && note.renoteId == null) {
+    note
+  }
+})

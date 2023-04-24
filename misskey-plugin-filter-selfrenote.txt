@@ -1,0 +1,20 @@
+/// @ 0.12.4
+
+### {
+  id: "884d52c7-2986-4f6b-939f-f027a02fd0a4"
+  name: "セルフRNを非表示"
+  version: "0.1.0"
+  author: "kanade"
+  description: "セルフRNをTLから消し去ります"
+  permissions: []
+  config: null
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (note.userId == note.renote.userId) {
+    null
+  }
+  else {
+    note
+  }
+})

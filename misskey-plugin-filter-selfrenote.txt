@@ -3,16 +3,45 @@
 ### {
   id: "884d52c7-2986-4f6b-939f-f027a02fd0a4"
   name: "セルフRNを非表示"
-  version: "0.1.0"
+  version: "0.2.0"
   author: "kanade"
   description: "セルフRNをTLから消し去ります"
   permissions: []
-  config: null
+  config: {
+    users: {
+      type: 'string'
+      label: '対象ユーザーID ( プロフィール → 情報 → ID で確認できます )'
+      description: '対象ユーザーIDをカンマ区切りで指定 ( 例 9dwbrxmwna,97wyrwmwnb ) ※スペースは入れない'
+      default: ''
+    }
+  }
+}
+
+@search(note) {
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let user users {
+      if (note.userId.incl(user)) {
+        return true
+      }
+    }
+  }
+  return false
 }
 
 Plugin:register_note_view_interruptor(@(note) {
-  if (note.userId == note.renote.userId) {
-    null
+  if (note.renoteId != null) {
+    if (note.userId == note.renote.userId) {
+      if (search(note)) {
+        null
+      }
+      else {
+        note
+      }
+    }
+    else {
+      note
+    }
   }
   else {
     note

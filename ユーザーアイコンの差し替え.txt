@@ -1,0 +1,44 @@
+/// @ 0.12.4
+
+### {
+  id: "91da9573-6697-4dc2-b255-5c63967ead1f"
+  name: "ユーザーアイコンの差し替え"
+  version: "1.0.0"
+  author: "kanade"
+  description: "どうしても苦手なユーザーアイコンを差し替えます"
+  permissions: []
+  config: {
+    users: {
+      type: 'string'
+      label: '対象ユーザー'
+      description: '対象ユーザーIDをカンマ区切りで指定'
+      default: '9dww7m85ww'
+    }
+    avatarUrl: {
+      type: 'string'
+      label: '差し替え後のアイコンURL'
+      description: ''
+      default: 'https://mfmf.s3.ap-northeast-1.wasabisys.com/media/06c6fd67-2563-4e51-8376-ae3e7db0d2da.png'
+    }
+
+  }
+}
+
+@searchUser(note) {
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let u users {
+      if (note.userId.incl(u)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (searchUser(note)) {
+    note.user.avatarUrl = `{Plugin:config.avatarUrl}`
+  }
+  note
+})

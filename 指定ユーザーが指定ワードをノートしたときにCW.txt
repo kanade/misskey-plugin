@@ -1,0 +1,68 @@
+/// @ 0.12.4
+
+### {
+  id: "9d9f5040-adb7-4d4d-889b-52909c22276b"
+  name: "指定ワードを含むノートをCWに設定"
+  version: "1.0.0"
+  author: "kanade"
+  description: "指定ワードを含むノートをCWに設定"
+  permissions: []
+  config: {
+    users: {
+      type: 'string'
+      label: '対象ユーザー'
+      description: '対象ユーザーIDをカンマ区切りで指定'
+      default: '9dww7m85ww'
+    }
+    words: {
+      type: 'string'
+      label: '自動CWにする対象'
+      description: 'CW対象をカンマ区切りで指定'
+      default: '#,http://,https://'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'プラグインによりCWされています'
+    }
+  }
+}
+
+@searchUser(note) {
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let u users {
+      if (note.userId.incl(u)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+@search(note) {
+  let words = `{Plugin:config.words}`.split(",")
+  if (words != false) {
+    each let w words {
+      if (note.text.incl(w)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (note.user.username != "kanade" && (note.text != null && note.cw == null)) {
+    if (search(note)) {
+      if (searchUser(note)) {
+        note.cw = "CW"
+      }
+      else {
+        note.cw = `{Plugin:config.wran}`
+      }
+    }
+  }
+  note
+})

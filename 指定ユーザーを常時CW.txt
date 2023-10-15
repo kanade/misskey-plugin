@@ -1,0 +1,45 @@
+/// @ 0.12.4
+
+### {
+  id: "edf72ec3-efe2-43cf-bf61-ee54c7b880db"
+  name: "指定ユーザーを常時CW"
+  version: "1.1.0"
+  author: "kanade"
+  description: "指定ユーザーを常時CW"
+  permissions: []
+  config: {
+    users: {
+      type: 'string'
+      label: '対象ユーザー'
+      description: '対象ユーザー ( @hogehoge ) を@抜きでカンマ区切りで指定'
+      default: 'hogehoge'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'CW対象ユーザーの発言'
+    }
+  }
+}
+
+@searchUser(note) {
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let u users {
+      if (note.user.username.incl(u)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (note.text != null && note.cw == null) {
+      if (searchUser(note)) {
+        note.cw = `{Plugin:config.wran}`
+      }
+    }
+  note
+})

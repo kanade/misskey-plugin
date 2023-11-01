@@ -2,10 +2,10 @@
 
 ### {
   id: "8a7f352e-2060-464a-ba0d-15bebd42c378"
-  name: "指定ワードを含むノートをCWに設定"
+  name: "指定ワードを含むノートをミュート/CW"
   version: "1.0.0"
   author: "kanade"
-  description: "指定ワードを含むノートをCWに設定"
+  description: "指定ワードを含むノートをミュート/CW"
   permissions: []
   config: {
     mode: {

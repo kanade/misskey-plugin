@@ -3,7 +3,7 @@
 ### {
   id: "edf72ec3-efe2-43cf-bf61-ee54c7b880db"
   name: "指定ユーザーを常時CW"
-  version: "1.1.0"
+  version: "1.2.0"
   author: "kanade"
   description: "指定ユーザーを常時CW"
   permissions: []
@@ -11,8 +11,14 @@
     users: {
       type: 'string'
       label: '対象ユーザー'
-      description: '対象ユーザー ( @hogehoge ) を@抜きでカンマ区切りで指定'
-      default: 'hogehoge'
+      description: '対象ユーザー ( @hogehoge@misskey.io ) を先頭の@抜きでカンマ区切りで指定（同一サーバー内でも省略せず記述）'
+      default: 'hogehoge@misskey.io'
+    }
+    hostname: {
+      type: 'string'
+      label: '使用するサーバーのホスト'
+      description: 'プラグインを使用するサーバーのホスト'
+      default: 'misskey.io'
     }
     wran: {
       type: 'string'
@@ -24,10 +30,18 @@
 }
 
 @searchUser(note) {
+  var username = note.user.username
+  if (note.user.host != null) {
+    username = `{note.user.username}@{note.user.host}`
+  }
+  else {
+    username = `{note.user.username}@{Plugin:config.hostname}`
+  }
+
   let users = `{Plugin:config.users}`.split(",")
   if (users != false) {
     each let u users {
-      if (note.user.username.incl(u)) {
+      if (username.incl(u)) {
         return true
       }
     }

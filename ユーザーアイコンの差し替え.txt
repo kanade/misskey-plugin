@@ -3,7 +3,7 @@
 ### {
   id: "91da9573-6697-4dc2-b255-5c63967ead1f"
   name: "ユーザーアイコンの差し替え"
-  version: "1.0.0"
+  version: "1.1.0"
   author: "kanade"
   description: "どうしても苦手なユーザーアイコンを差し替えます"
   permissions: []
@@ -11,8 +11,14 @@
     users: {
       type: 'string'
       label: '対象ユーザー'
-      description: '対象ユーザーIDをカンマ区切りで指定'
-      default: '9dww7m85ww'
+      description: '対象ユーザー ( @hogehoge@misskey.io ) を先頭の@抜きでカンマ区切りで指定（同一サーバー内でも省略せず記述）'
+      default: 'hogehoge@misskey.io'
+    }
+    hostname: {
+      type: 'string'
+      label: '使用するサーバーのホスト'
+      description: 'プラグインを使用するサーバーのホスト'
+      default: 'misskey.io'
     }
     avatarUrl: {
       type: 'string'
@@ -25,10 +31,18 @@
 }
 
 @searchUser(note) {
+  var username = note.user.username
+  if (note.user.host != null) {
+    username = `{note.user.username}@{note.user.host}`
+  }
+  else {
+    username = `{note.user.username}@{Plugin:config.hostname}`
+  }
+
   let users = `{Plugin:config.users}`.split(",")
   if (users != false) {
     each let u users {
-      if (note.userId.incl(u)) {
+      if (username.incl(u)) {
         return true
       }
     }

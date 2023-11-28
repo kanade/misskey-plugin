@@ -1,0 +1,68 @@
+/// @ 0.12.4
+
+### {
+  id: "c3539a5c-8561-4fb5-b60e-b244fb4e649a"
+  name: "指定ユーザーの画像付きノートをミュート/CW"
+  version: "1.0.0"
+  author: "kanade"
+  description: "指定ユーザーの画像付きノートをミュート/CW"
+  permissions: []
+  config: {
+    mode: {
+      type: 'boolean'
+      label: 'OFFでCW / ONでミュート'
+      description: 'ミュートするにはサーバーのバージョンが2023.11.0以降である必要があります。'
+      default: false
+    }
+    users: {
+      type: 'string'
+      label: '対象ユーザー'
+      description: '対象ユーザー ( @hogehoge@misskey.io ) を先頭の@抜きでカンマ区切りで指定（同一サーバー内でも省略せず記述）'
+      default: 'hogehoge@misskey.io'
+    }
+    hostname: {
+      type: 'string'
+      label: '使用するサーバーのホスト'
+      description: 'プラグインを使用するサーバーのホスト'
+      default: 'yojohan.cc'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: '画像付きのノートです'
+    }
+  }
+}
+
+@search(note) {
+  var username = note.user.username
+  if (note.user.host != null) {
+    username = `{note.user.username}@{note.user.host}`
+  }
+  else {
+    username = `{note.user.username}@{Plugin:config.hostname}`
+  }
+
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let u users {
+      if (username.incl(u) && note.fileIds.len != 0) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (search(note)) {
+    if (Plugin:config.mode) {
+      return null
+    }
+    else {
+      note.cw = `{Plugin:config.wran}`
+    }
+  }
+  note
+})

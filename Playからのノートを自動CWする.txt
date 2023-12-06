@@ -10,7 +10,7 @@
     target: {
       type: 'string'
       label: '自動CWにする対象'
-      description: 'たとえば x3 x4 scale など対象を「半角スペース」区切りで指定'
+      description: 'たとえば https://mfmf.club/play/ など対象を「半角スペース」区切りで指定'
       default: 'https://mfmf.club/play/'
     }
     wran: {

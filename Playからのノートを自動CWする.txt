@@ -4,14 +4,14 @@
   name: "Play Auto CW"
   version: "1.0.1"
   author: "kanade"
-  description: "Playのノートを自動CW（ワードと注意文を指定可）"
+  description: "Playのノート投稿時に自動CW設定（ワードと注意文を指定可）"
   permissions: []
   config: {
     target: {
       type: 'string'
       label: '自動CWにする対象'
       description: 'たとえば https://mfmf.club/play/ など対象を半角カンマ「,」区切りで指定'
-      default: 'https://mfmf.club/play/'
+      default: 'https://mfmf.club/play/,https://misskey.io/play'
     }
     wran: {
       type: 'string'

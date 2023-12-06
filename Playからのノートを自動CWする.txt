@@ -10,7 +10,7 @@
     target: {
       type: 'string'
       label: '自動CWにする対象'
-      description: 'たとえば https://mfmf.club/play/ など対象を「半角スペース」区切りで指定'
+      description: 'たとえば https://mfmf.club/play/ など対象を半角カンマ「,」区切りで指定'
       default: 'https://mfmf.club/play/'
     }
     wran: {
@@ -23,7 +23,7 @@
 }
 
 Plugin:register_note_post_interruptor(@(note) {
-  let target = Plugin:config.target.split(" ")
+  let target = Plugin:config.target.split(",")
   if Core:type(target) != 'arr' {
     Mk:dialog('書式エラー' '対象文字列の指定に誤りがあります' 'error')
   }

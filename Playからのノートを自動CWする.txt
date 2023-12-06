@@ -2,7 +2,7 @@
 ### {
   id: "ac9d33c0-64c2-400e-a08e-0b3e34565229"
   name: "Play Auto CW"
-  version: "1.0.0"
+  version: "1.0.1"
   author: "kanade"
   description: "Playのノートを自動CW（ワードと注意文を指定可）"
   permissions: []

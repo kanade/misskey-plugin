@@ -1,0 +1,37 @@
+/// @ 0.12.4
+### {
+  id: "ac9d33c0-64c2-400e-a08e-0b3e34565229"
+  name: "Play Auto CW"
+  version: "1.0.0"
+  author: "kanade"
+  description: "Playのノートを自動CW（ワードと注意文を指定可）"
+  permissions: []
+  config: {
+    target: {
+      type: 'string'
+      label: '自動CWにする対象'
+      description: 'たとえば x3 x4 scale など対象を「半角スペース」区切りで指定'
+      default: 'https://mfmf.club/play/'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'play▶'
+    }
+  }
+}
+
+Plugin:register_note_post_interruptor(@(note) {
+  let target = Plugin:config.target.split(" ")
+  if Core:type(target) != 'arr' {
+    Mk:dialog('書式エラー' '対象文字列の指定に誤りがあります' 'error')
+  }
+
+  each let t target {
+    if (note.text != null && note.cw == null && note.text.incl(t)) {
+      note.cw = `{Plugin:config.wran}`
+    }
+  }
+  note
+})

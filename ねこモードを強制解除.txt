@@ -1,0 +1,24 @@
+/// @ 0.12.4
+### {
+  id: "d86d202a-bd31-4cc6-8843-bb2def03b8f7"
+  name: "ねこちゃん解除"
+  version: "1.0.0"
+  author: "kanade"
+  description: "ねこちゃん解除"
+  permissions: []
+  config: {
+    catmode: {
+      type: "boolean"
+      label: "ねこに擬態した人の正体を暴きますか？"
+      default: true
+    }
+  }
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (Plugin:config.catmode) {
+    note.user.isCat = false
+  }
+
+  note
+})

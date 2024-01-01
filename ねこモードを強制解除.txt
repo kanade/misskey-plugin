@@ -18,6 +18,14 @@
 Plugin:register_note_view_interruptor(@(note) {
   if (Plugin:config.catmode) {
     note.user.isCat = false
+
+    if (note.renote != null) {
+      note.renote.user.isCat = false
+    }
+
+    if (note.reply != null) {
+      note.reply.user.isCat = false
+    }
   }
 
   note

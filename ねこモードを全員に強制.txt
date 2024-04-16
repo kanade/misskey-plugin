@@ -1,0 +1,32 @@
+/// @ 0.12.4
+### {
+  id: "a6410938-9a1d-6d81-4019-36359d0baaa6"
+  name: "全員ねこちゃん"
+  version: "1.1.0"
+  author: "kanade"
+  description: "全員ねこちゃん"
+  permissions: []
+  config: {
+    catmode: {
+      type: "boolean"
+      label: "全員ねこちゃんにしちゃう？"
+      default: true
+    }
+  }
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  if (Plugin:config.catmode) {
+    note.user.isCat = true
+
+    if (note.renote != null) {
+      note.renote.user.isCat = true
+    }
+
+    if (note.reply != null) {
+      note.reply.user.isCat = true
+    }
+  }
+
+  note
+})

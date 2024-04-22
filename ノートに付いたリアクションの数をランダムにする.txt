@@ -1,0 +1,28 @@
+/// @ 0.12.4
+
+### {
+  id: "2b78b2d8-17b3-4b13-88f3-335ee7494283"
+  name: "ノートに付いたリアクションの数をランダムにする"
+  version: "1.0.0"
+  author: "kanade"
+  description: "ノートに付いたリアクションの数をランダムにします"
+  permissions: []
+  config: null
+}
+
+let random = Math:gen_rng(`${Date:year()}${Date:month()}${Date:day()}${Date:hour()}${Date:minute()}${Date:second()}`)
+
+@random_reaction_count(original: obj): obj {
+  let new_obj = {}
+  each let kv Obj:kvs(original) {
+    let reaction = kv[0]
+    let count = random(0, 9999) // 0から9999までのランダムな整数
+    Obj:set(new_obj, reaction, count)
+  }
+  return new_obj
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  note.reactions = random_reaction_count(note.reactions)
+  note
+})

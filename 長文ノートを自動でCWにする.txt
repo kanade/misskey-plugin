@@ -1,0 +1,35 @@
+/// @ 0.12.4
+### {
+  id: "262fe469-c5da-fb35-cc94-891c304e37b5"
+  name: "長文ノートを自動でCWにする"
+  version: "1.0.0"
+  author: "kanade"
+  description: "長文ノートを自動でCWにします"
+  permissions: []
+  config: {
+    length: {
+      type: "integer"
+      label: "CWにする文字数"
+      description: "指定した文字数以上のノートをCWに設定します。MFMなども文字数にカウントされます。"
+      default: 140
+    }
+  }
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  var target = note.text
+  if (note.reply != null) {
+    target = reply.text
+  }
+  if (note.renote != null) {
+    target = note.renote.text
+  }
+
+  if (target.len > Plugin:config.length) {
+    if (note.cw == null) {
+      note.cw = "長文ノート（自動CW）"
+    }
+  }
+
+  note
+})

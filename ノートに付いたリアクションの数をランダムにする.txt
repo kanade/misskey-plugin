@@ -16,7 +16,7 @@ let random = Math:gen_rng(`${Date:year()}${Date:month()}${Date:day()}${Date:hour
   let new_obj = {}
   each let kv Obj:kvs(original) {
     let reaction = kv[0]
-    let count = random(1, 9999) // 0から9999までのランダムな整数
+    let count = random(1, 9999) // 1から9999までのランダムな整数
     Obj:set(new_obj, reaction, count)
   }
   return new_obj

@@ -1,0 +1,94 @@
+/// @ 0.12.4
+
+### {
+  id: "8a7f352e-2060-464a-ba0d-15bebd42c378"
+  name: "指定ワードを含むノートをミュート/CW"
+  version: "1.0.0"
+  author: "kanade"
+  description: "指定ワードを含むノートをミュート/CW"
+  permissions: []
+  config: {
+    mode: {
+      type: 'boolean'
+      label: 'OFFでCW / ONでミュート'
+      description: 'ミュートするにはサーバーのバージョンが2023.11.0以降である必要があります。'
+      default: false
+    }
+    words: {
+      type: 'string'
+      label: '対象ワード'
+      description: '対象ワードをカンマ区切りで指定'
+      default: '対象ワード1,対象ワード2,対象ワード3'
+    }
+    ex_username: {
+      type: 'string'
+      label: '除外するユーザー名'
+      description: '除外するユーザー名（自分のアカウント指定を想定）'
+      default: 'kanade@yojohan.cc'
+    }
+    hostname: {
+      type: 'string'
+      label: '使用するサーバーのホスト'
+      description: 'プラグインを使用するサーバーのホスト'
+      default: 'yojohan.cc'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'プラグインによりCWされています'
+    }
+  }
+}
+
+@search(text) {
+  let words = `{Plugin:config.words}`.split(",")
+  if (words != false) {
+    each let w words {
+      if (text.incl(w)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  var username = note.user.username
+  if (note.user.host != null) {
+    username = `{note.user.username}@{note.user.host}`
+  }
+  else {
+    username = `{note.user.username}@{Plugin:config.hostname}`
+  }
+
+  var text = null
+  if (note.text != null || note.replyId != null) {
+    text = note.text
+  }
+  //リプライ先
+  //if (note.replyId != null) {
+  //  text = note.reply.text
+  //}
+  if (note.renoteId != null) {
+    text = note.renote.text
+  }
+
+  // 設定で指定したユーザーのノートは対象外にする
+  if (username != `{Plugin:config.ex_username}` && text != null) {
+    if (search(text)) {
+      if (Plugin:config.mode) {
+        return null
+      }
+      else {
+        if (note.renoteId != null) {
+          note.renote.cw = `{Plugin:config.wran}`
+        }
+        else {
+          note.cw = `{Plugin:config.wran}`
+        }
+      }
+    }
+  }
+  note
+})

@@ -1,0 +1,39 @@
+/// @ 0.12.4
+### {
+  id: "b4244a7a-2a3e-43c1-a244-671adb2ecc9f"
+  name: "MFM Auto CW"
+  version: "1.0.0"
+  author: "kanade"
+  description: "指定ワード（MFMも）を含むノートを自動CW（ワードと注意文を指定可）"
+  permissions: []
+  config: {
+    target: {
+      type: 'string'
+      label: '自動CWにする対象'
+      description: 'たとえば x3 x4 scale など対象を半角スペース区切りで指定'
+      default: '$[x3 $[x4 $[scale'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'x3, x4, scaleを使ったノートです'
+    }
+  }
+}
+
+Plugin:register_note_post_interruptor(@(note) {
+  let target = Plugin:config.target.split(" ")
+  if Core:type(target) != 'arr' {
+    Mk:dialog('書式エラー' '文字列指定に誤りがあります' 'error')
+  }
+
+  each let t target {
+    if (note.text != null && note.cw == null && note.text.incl(t)) {
+      Mk:dialog('bbb' '文字列指定に誤りがあります' 'error')
+      note.cw = `{Plugin:config.wran}`
+    }
+  }
+  Mk:dialog('ccc' '文字列指定に誤りがあります' 'error')
+  note
+})

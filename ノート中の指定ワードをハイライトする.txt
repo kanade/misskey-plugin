@@ -3,7 +3,7 @@
 ### {
   id: "1e1592fb-8b16-46bb-9144-cd94fbc7201a"
   name: "指定ワードをハイライト"
-  version: "1.0.0"
+  version: "1.0.1"
   author: "kanade"
   description: "指定ワードをハイライト"
   permissions: []
@@ -31,6 +31,8 @@
 }
 
 Plugin:register_note_view_interruptor(@(note) {
-  search(note)
+  if (note.text != null) {
+    search(note)
+  }
   note
 })

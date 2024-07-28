@@ -1,0 +1,110 @@
+/// @ 0.12.4
+
+### {
+  id: "9d9f5040-adb7-4d4d-889b-52909c22276b"
+  name: "指定ユーザーの指定ワードを含むノートをミュート/CW"
+  version: "1.1.0"
+  author: "kanade"
+  description: "指定ユーザーの指定ワードを含むノートをミュート/CW"
+  permissions: []
+  config: {
+    mode: {
+      type: 'boolean'
+      label: 'OFFでCW / ONでミュート'
+      description: 'ミュートするにはサーバーのバージョンが2023.11.0以降である必要があります。'
+      default: true
+    }
+    users: {
+      type: 'string'
+      label: '対象ユーザー'
+      description: '対象ユーザーIDをサーバー名まで指定、カンマ区切りで複数可'
+      default: 'hogehoge@hogehoge.com'
+    }
+    words: {
+      type: 'string'
+      label: '自動CWにする対象'
+      description: '対象ワードをカンマ区切りで指定'
+      default: '見たくないワード1,見たくないワード2'
+    }
+    wran: {
+      type: 'string'
+      label: 'CWに使うテキスト'
+      description: '注意喚起のテキストです'
+      default: 'プラグインによりCWされています'
+    }
+    hostname: {
+      type: 'string'
+      label: '使用するサーバーのホスト'
+      description: 'プラグインを使用するサーバーのホスト'
+      default: 'mfmf.club'
+    }
+    ex_username: {
+      type: 'string'
+      label: '除外するユーザー名'
+      description: '除外するユーザー名（自分のアカウント指定を想定）'
+      default: 'kanade@mfmf.club'
+    }
+  }
+}
+
+@searchUser(username) {
+  let users = `{Plugin:config.users}`.split(",")
+  if (users != false) {
+    each let u users {
+      if (username.incl(u)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+@search(text) {
+  let words = `{Plugin:config.words}`.split(",")
+  if (words != false) {
+    each let w words {
+      if (text.incl(w)) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
+Plugin:register_note_view_interruptor(@(note) {
+  var username = note.user.username
+  if (note.user.host != null) {
+    username = `{note.user.username}@{note.user.host}`
+  }
+  else {
+    username = `{note.user.username}@{Plugin:config.hostname}`
+  }
+
+  var text = null
+  if (note.text != null || note.replyId != null) {
+    text = note.text
+  }
+  if (note.replyId != null) {
+    text = note.reply.text
+  }
+  if (note.renoteId != null) {
+    text = note.renote.text
+  }
+
+  if (username != `{Plugin:config.ex_username}` && searchUser(username) && text != null) {
+    if (search(text)) {
+      if (Plugin:config.mode) {
+        return null
+      }
+      else {
+        if (note.renoteId != null) {
+          note.renote.cw = `{Plugin:config.wran}`
+        }
+        else {
+          note.cw = `{Plugin:config.wran}`
+        }
+      }
+    }
+  }
+  note
+})
